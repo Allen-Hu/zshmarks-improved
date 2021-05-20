@@ -11,7 +11,7 @@ oh-my-zsh
 * Download the script or clone this repository in [oh-my-zsh](http://github.com/robbyrussell/oh-my-zsh) plugins directory:
 
         cd ~/.oh-my-zsh/custom/plugins
-        git clone https://github.com/jocelynmallon/zshmarks.git
+        git clone https://github.com/Allen-Hu/zshmarks-improved.git
 
 * Activate the plugin in `~/.zshrc`:
 
@@ -42,12 +42,6 @@ Then make sure you activate the plugin in your .zpreztorc file:
         zstyle ':prezto:load' pmodule \
         zshmarks \
         ...
-
-zplug
------
-Add the following to your .zshrc file somewhere after you source zplug.
-
-        zplug "jocelynmallon/zshmarks"
 
 Commands/Usage:
 ------
