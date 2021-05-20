@@ -21,7 +21,7 @@ if [[ ! -f $BOOKMARKS_FILE ]]; then
 	touch $BOOKMARKS_FILE
 fi
 
-_zshmarks_move_to_trash(){
+__zshmarks_move_to_trash() {
   if [[ $(uname) == "Linux"* || $(uname) == "FreeBSD"*  ]]; then
     label=`date +%s`
     mkdir -p ~/.local/share/Trash/info ~/.local/share/Trash/files
@@ -111,7 +111,7 @@ function showmarks() {
 }
 
 # Delete a bookmark
-function deletemark()  {
+function deletemark() {
   local bookmark_name=$1
   if [[ -z $bookmark_name ]]; then
     printf "%s \n" "Please provide a name for your bookmark to delete. For example:"
@@ -129,7 +129,7 @@ function deletemark()  {
       bookmark_line=${bookmark_array[(r)$bookmark_search]}
       bookmark_array=(${bookmark_array[@]/$bookmark_line})
       eval "printf '%s\n' \"\${bookmark_array[@]}\"" >! $BOOKMARKS_FILE
-      _zshmarks_move_to_trash
+      __zshmarks_move_to_trash
     fi
 	fi
 }
