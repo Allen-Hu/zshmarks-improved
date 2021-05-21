@@ -130,6 +130,7 @@ function deletemark() {
       bookmark_array=(${bookmark_array[@]/$bookmark_line})
       eval "printf '%s\n' \"\${bookmark_array[@]}\"" >! $BOOKMARKS_FILE
       __zshmarks_move_to_trash
+      echo "Bookmark '$bookmark_name' deleted"
     fi
 	fi
 }
