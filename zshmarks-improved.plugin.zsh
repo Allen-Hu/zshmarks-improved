@@ -62,20 +62,17 @@ __zshmarks_zgrep() {
 	local outvar="$1"; shift
 	local pattern="$1"
 	local filename="$2"
-	local file_lines=($(<"$filename"))
-	for line in "${file_lines[@]}"; do
-		if [[ "$line" =~ "$pattern" ]]; then
-			eval "$outvar=\"$line\""
-			return 0
-		fi
-	done
-	return 1
+  eval "$outvar=\"$(cat $filename | grep -e $pattern)\""
+  if [ -z "$outvar" ]; then
+	  return 1
+  fi
+  return 0
 }
 
 function jump() {
 	local bookmark_name=$1
 	local bookmark
-	if ! __zshmarks_zgrep bookmark "\\|$bookmark_name\$" "$BOOKMARKS_FILE"; then
+	if ! __zshmarks_zgrep bookmark "\|$bookmark_name\$" "$BOOKMARKS_FILE"; then
 		echo "Invalid name, please provide a valid bookmark name. For example:"
 		echo "  jump foo"
 		echo
