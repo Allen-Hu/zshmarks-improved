@@ -118,7 +118,7 @@ function deletemark() {
       eval "printf '%s\n' \"'${bookmark_name}' not found, skipping.\""
     else
       cp "${BOOKMARKS_FILE}" "${BOOKMARKS_FILE}.bak"
-      grep -v \|"${bookmark_name}"$ "${BOOKMARKS_FILE}.bak" >! "${BOOKMARKS_FILE}"
+      grep -v \|"${bookmark_name}"$ "${BOOKMARKS_FILE}.bak" > "${BOOKMARKS_FILE}"
       echo "Bookmark '$bookmark_name' deleted"
     fi
 	fi

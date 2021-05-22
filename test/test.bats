@@ -16,6 +16,9 @@ teardown() {
 }
 
 @test "delete message" {
+
+	bookmark tmp
+
 	run deletemark tmp
 	assert_output -p "Bookmark 'tmp' deleted"
 }
