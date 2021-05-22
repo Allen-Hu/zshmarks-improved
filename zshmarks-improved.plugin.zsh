@@ -62,8 +62,7 @@ __zshmarks_zgrep() {
 	local outvar="$1"; shift
 	local pattern="$1"
 	local filename="$2"
-	local file_contents="$(<"$filename")"
-	local file_lines; file_lines=(${(f)file_contents})
+	local file_lines=($(<"$filename"))
 	for line in "${file_lines[@]}"; do
 		if [[ "$line" =~ "$pattern" ]]; then
 			eval "$outvar=\"$line\""
@@ -91,8 +90,7 @@ function jump() {
 
 # Show a list of the bookmarks
 function showmarks() {
-  local bookmark_file="$(<"$BOOKMARKS_FILE")"
-  local bookmark_array; bookmark_array=(${(f)bookmark_file});
+  local bookmark_array=($(<"$BOOKMARKS_FILE"))
   local bookmark_name bookmark_path bookmark_line
   if [[ $# -eq 1 ]]; then
     bookmark_name="*\|${1}"
@@ -119,17 +117,11 @@ function deletemark() {
     return 1
   else
     local bookmark_line bookmark_search
-    local bookmark_file="$(<"$BOOKMARKS_FILE")"
-    local bookmark_array; bookmark_array=(${(f)bookmark_file});
-    bookmark_search="*\|${bookmark_name}"
-    if [[ -z ${bookmark_array[(r)$bookmark_search]} ]]; then
+    if ! __zshmarks_zgrep bookmark "\\|$bookmark_name\$" "$BOOKMARKS_FILE"; then
       eval "printf '%s\n' \"'${bookmark_name}' not found, skipping.\""
     else
-      \cp "${BOOKMARKS_FILE}" "${BOOKMARKS_FILE}.bak"
-      bookmark_line=${bookmark_array[(r)$bookmark_search]}
-      bookmark_array=(${bookmark_array[@]/$bookmark_line})
-      eval "printf '%s\n' \"\${bookmark_array[@]}\"" >! $BOOKMARKS_FILE
-      __zshmarks_move_to_trash
+      cp "${BOOKMARKS_FILE}" "${BOOKMARKS_FILE}.bak"
+      grep -v \|"${bookmark_name}"$ "${BOOKMARKS_FILE}.bak" >! "${BOOKMARKS_FILE}"
       echo "Bookmark '$bookmark_name' deleted"
     fi
 	fi
