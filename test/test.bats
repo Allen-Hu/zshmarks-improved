@@ -46,3 +46,60 @@ teardown() {
 	deletemark tmpa
 	deletemark tmpb
 }
+
+@test "bookmark_1" {
+	bookmark
+	deletemark tempdir
+}
+
+@test "bookmark_2" {
+	bookmark tmp
+	deletemark tmp
+}
+
+@test "bookmark_3" {
+	cd /
+	bookmark tmp
+	deletemark tmp
+}
+
+@test "bookmark_4" {
+	bookmark tmp
+	run bookmark tmp
+	assert_output -p "Bookmark already existed"
+	deletemark tmp
+}
+
+@test "jump_1" {
+	run jump fuck
+	assert_output -p "Invalid name"
+}
+
+@test "jump_2" {
+	bookmark tmp
+	folder=$(pwd)
+	cd ~
+	jump tmp
+	new_folder=$(pwd)
+	[ "$folder" = "$new_folder" ]
+	deletemark tmp
+}
+
+@test "showmarks_1" {
+	showmarks
+}
+
+@test "deletemark_1" {
+	run deletemark
+	assert_output -p "Please provide"
+}
+
+@test "deletemark_2" {
+	run deletemark fuck
+	assert_output -p "not found"
+}
+
+@test "deletemark_3" {
+	bookmark tmp
+	deletemark tmp
+}
