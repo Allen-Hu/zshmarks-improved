@@ -49,7 +49,7 @@ function bookmark() {
     fi
     # Store the bookmark as folder|name
     bookmark="$cur_dir|$bookmark_name"
-    if [[ -z $(grep "$bookmark" $BOOKMARKS_FILE 2>/dev/null) ]]; then
+    if ! __zshmarks_zgrep foo "\\|$bookmark_name\$" "$BOOKMARKS_FILE"; then
         echo $bookmark >> $BOOKMARKS_FILE
         echo "Bookmark '$bookmark_name' saved"
     else
@@ -62,8 +62,9 @@ __zshmarks_zgrep() {
 	local outvar="$1"; shift
 	local pattern="$1"
 	local filename="$2"
-  eval "$outvar=\"$(cat $filename | grep -e $pattern)\""
-  if [ -z "$outvar" ]; then
+  local result=$(cat $filename | grep -e $pattern)
+  eval "$outvar=\"$result\""
+  if [ -z "$result" ]; then
 	  return 1
   fi
   return 0
@@ -87,22 +88,14 @@ function jump() {
 
 # Show a list of the bookmarks
 function showmarks() {
-  local bookmark_array=($(<"$BOOKMARKS_FILE"))
-  local bookmark_name bookmark_path bookmark_line
-  if [[ $# -eq 1 ]]; then
-    bookmark_name="*\|${1}"
-    bookmark_line=${bookmark_array[(r)$bookmark_name]}
+  local bookmark_name bookmark_path bookmark_line buf
+  while read bookmark_line; do
     bookmark_path="${bookmark_line%%|*}"
     bookmark_path="${bookmark_path/\$HOME/~}"
-    printf "%s \n" $bookmark_path
-  else
-    for bookmark_line in $bookmark_array; do
-      bookmark_path="${bookmark_line%%|*}"
-      bookmark_path="${bookmark_path/\$HOME/~}"
-      bookmark_name="${bookmark_line#*|}"
-      printf "%s\t\t%s\n" "$bookmark_name" "$bookmark_path"
-    done
-  fi
+    bookmark_name="${bookmark_line#*|}"
+    buf+="$(printf '%s\t\t%s' $bookmark_name $bookmark_path)\n"
+  done < $BOOKMARKS_FILE
+  echo "$buf" | sort | column -t
 }
 
 # Delete a bookmark
@@ -119,6 +112,7 @@ function deletemark() {
     else
       cp "${BOOKMARKS_FILE}" "${BOOKMARKS_FILE}.bak"
       grep -v \|"${bookmark_name}"$ "${BOOKMARKS_FILE}.bak" > "${BOOKMARKS_FILE}"
+      __zshmarks_move_to_trash
       echo "Bookmark '$bookmark_name' deleted"
     fi
 	fi
