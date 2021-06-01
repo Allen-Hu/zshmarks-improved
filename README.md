@@ -15,33 +15,11 @@ oh-my-zsh
 
 * Activate the plugin in `~/.zshrc`:
 
-        plugins=( [plugins...] zshmarks [plugins...])
+        plugins=( [plugins...] zshmarks-improved [plugins...])
 
 * Source `~/.zshrc`  to take changes into account:
 
         source ~/.zshrc
-
-antigen
--------
-Add `antigen bundle jocelynmallon/zshmarks` to your .zshrc where you're adding your other plugins. Antigen will clone the plugin for you and add it to your antigen setup the next time you start a new shell.
-
-prezto
-------
-For most people the easiest way to use zshmarks with [prezto](https://github.com/sorin-ionescu/prezto) is to manually clone the zshmarks repo to a directory of your choice (e.g. /usr/local or ~/bin) and symlink the zshmarks folder into your zpretzo/modules folder:
-
-        ln -s ~/bin/zshmarks ~/.zprezto/modules/zshmarks
-
-Alternatively, you can add the zshmarks repository as a submodule to your prezto repo by manually editing the '.gitmodules' file:
-
-        [submodule "modules/zshmarks"]
-        	path = modules/zshmarks
-        	url = https://github.com/jocelynmallon/zshmarks.git
-
-Then make sure you activate the plugin in your .zpreztorc file:
-
-        zstyle ':prezto:load' pmodule \
-        zshmarks \
-        ...
 
 Commands/Usage:
 ------
