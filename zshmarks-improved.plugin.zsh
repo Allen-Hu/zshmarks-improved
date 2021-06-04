@@ -93,9 +93,9 @@ function showmarks() {
     bookmark_path="${bookmark_line%%|*}"
     bookmark_path="${bookmark_path/\$HOME/~}"
     bookmark_name="${bookmark_line#*|}"
-    buf+="$(printf '%s\t\t%s' $bookmark_name $bookmark_path)\n"
+    buf+="$(printf '%s\t%s' $bookmark_name $bookmark_path)\n"
   done < $BOOKMARKS_FILE
-  echo "$buf" | sort | column -t
+  echo "$buf" | sort | awk -F '\t' '{ printf("%-20s %s\n", $1, $2) }'
 }
 
 # Delete a bookmark
